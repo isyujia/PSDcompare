@@ -6,6 +6,7 @@ function resolve(dir) {
 }
 
 module.exports = defineConfig({
+  lintOnSave: false,
   transpileDependencies: true,
   chainWebpack: config => {
     // set svg-sprite-loader
@@ -31,5 +32,6 @@ module.exports = defineConfig({
         additionalData: `@import "~@/css/base.scss";`
       }
     }
-  }
+  },
+  publicPath:'/public/'
 })

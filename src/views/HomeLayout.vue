@@ -1,31 +1,31 @@
 <template>
-  <el-container id="main-container" :style="'height:'+windowHeight+'px'">
-    <el-header height="66px" class="el-header-header">
-      <header-component></header-component>
-    </el-header>
+  <div>
+    <el-container id="main-container" :style="'height:' + windowHeight + 'px'">
+      <el-header height="7.1%" class="el-header-header">
+        <header-component></header-component>
+      </el-header>
 
-    <el-container>
-      <el-aside width="" style="flex-basis: 12.5%">
-        <aside-component></aside-component>
-      </el-aside>
-      <el-main>
-        <home-index-page></home-index-page>
-      </el-main>
+      <el-container>
+        <el-aside width="" style="flex-basis: 12.5%">
+          <aside-component></aside-component>
+        </el-aside>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-container>
     </el-container>
-  </el-container>
+  </div>
 </template>
 
 <script>
 import AsideComponent from "@/components/Aside";
 import HeaderComponent from "@/components/Header";
-import HomeIndexPage from "@/pages/HomeIndexPage.vue";
 
 export default {
-  name: "HomeView",
+  name: "HomeLayout",
   components: {
     AsideComponent,
     HeaderComponent,
-    HomeIndexPage,
   },
   data() {
     return {
@@ -81,5 +81,8 @@ body {
 .el-main {
   text-align: center;
   padding: 0% !important;
+}
+.el-container {
+  height: 91.7%;
 }
 </style>

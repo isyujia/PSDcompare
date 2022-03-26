@@ -2,7 +2,7 @@
   <div class="aside">
     <el-row>
       <el-col :span="24">
-        <div class="active">
+        <div @click="redirectTo('/compare')" class="active">
           <span class="compare-icon"></span>
           图纸对比
         </div>
@@ -10,7 +10,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <div class=""><span class="note-icon"></span> 历史记录</div>
+        <div class="" @click="redirectTo('/history')"><span class="note-icon"></span> 历史记录</div>
       </el-col>
     </el-row>
   </div>
@@ -24,6 +24,11 @@ export default {
       publicPath: process.env.BASE_URL,
     };
   },
+  methods:{
+    redirectTo(router){
+      this.$router.push(router)
+    }
+  }
 };
 </script>
 
