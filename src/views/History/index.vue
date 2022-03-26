@@ -5,7 +5,7 @@
         <el-col :span="1">
           <span>关键词：</span>
         </el-col>
-        <el-col span="3">
+        <el-col :span="3">
           <el-input
             placeholder="请输入内容"
             v-model="searchText"
@@ -32,45 +32,18 @@
       </el-row>
     </el-header>
     <el-main class="main">
-      <el-container>
-        <el-header>
-          <el-row class="main-right-header">
-            <el-col :span="4">
-              <span class="gray">图纸名称：</span>
-              <span>预制件1</span>
-            </el-col>
-            <el-col :span="5">
-              <span class="gray">图纸大小：</span>
-              <span>20M</span>
-            </el-col>
-            <el-col :span="5">
-              <span class="gray">图纸分辨率：</span>
-              <span>3000*4000</span>
-            </el-col>
-            <el-col :span="5">
-              <span class="gray">红色：</span>
-              <span>代表修改部分</span>
-            </el-col>
-            <el-col :span="5">
-              <span class="gray">绿色：</span>
-              <span>代表删除部分</span>
-            </el-col>
-          </el-row>
-        </el-header>
-        <el-main>
-          <div class="right-main-img">
-            <img :src="`${publicPath}images/251.png`" alt="" />
-          </div>
-        </el-main>
-      </el-container>
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column prop="date" label="日期" width="180">
+        </el-table-column>
+        <el-table-column prop="name" label="姓名" width="180">
+        </el-table-column>
+        <el-table-column prop="address" label="地址"> </el-table-column>
+      </el-table>
     </el-main>
     <el-footer>
       <el-row class="pagination">
         <el-col :span="24">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage4"
             :page-sizes="[100, 200, 300, 400]"
             :page-size="100"
             layout="total, sizes, prev, pager, next, jumper"
@@ -96,6 +69,28 @@ export default {
       publicPath: process.env.BASE_URL,
       daterange: "",
       searchText: "",
+      tableData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄",
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1517 弄",
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄",
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1516 弄",
+        },
+      ],
     };
   },
   methods: {},
@@ -118,41 +113,19 @@ export default {
     border-top-right-radius: $radius;
   }
   .main {
-    .el-container {
-      height: 100%;
-    }
-    .main-right-header {
-      .el-col {
-        &:first-of-type {
-          text-align: left;
-        }
-        &:last-of-type {
-          text-align: right;
-        }
-      }
-    }
-    .right-main-img {
-      padding: 20px;
-      width: 100%;
-      height: 100%;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    flex: {
-      basis: 77%;
-    }
     background: white;
+    .el-table{
+        padding: 0 17px;
+    }
   }
   .el-footer {
     background: white;
     border-bottom-left-radius: $radius;
     border-bottom-right-radius: $radius;
-    .pagination{
-        .el-col{
-            text-align: right;
-        }
+    .pagination {
+      .el-col {
+        text-align: right;
+      }
     }
   }
 }
