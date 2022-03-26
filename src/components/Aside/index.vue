@@ -4,7 +4,7 @@
       <el-col :span="24">
         <div
           @click="redirectTo('/compare')"
-          v-bind:class="{ active: currentRouter=='HomeHistory' }"
+          v-bind:class="{ active: isHomeCompare }"
         >
           <span class="compare-icon"></span>
           图纸对比
@@ -14,7 +14,7 @@
     <el-row>
       <el-col :span="24">
         <div
-          v-bind:class="{ active: isHomeCompare }"
+          v-bind:class="{ active: isHomeHistory }"
           @click="redirectTo('/history')"
         >
           <span class="note-icon"></span> 历史记录
@@ -30,21 +30,21 @@ export default {
   data() {
     return {
       publicPath: process.env.BASE_URL,
-      currentRouter: this.$router.name,
-      isHomeHistory: true,
-      isHomeCompare: false,
     };
   },
-  computed: {},
-  methods: {
-    redirectTo(router) {
-      this.$router.push(router);
+  computed: {
+    isHomeHistory() {
+      return this.$route.name == "HomeHistory";
+    },
+    isHomeCompare() {
+      return this.$route.name == "HomeCompare";
     },
   },
-  beforeRouteUpdate(to, from) {
-    console.log(this.currentRouter)
-    if (this.$router.name == "HomeHistory") this.isHomeHistory = true;
-    if (this.$router.name == "HomeCompare") this.isHomeCompare = true;
+  methods: {
+    redirectTo(router) {
+      if (this.$route.path == router) return false;
+      this.$router.push(router);
+    },
   },
 };
 </script>
