@@ -61,9 +61,13 @@ export default {
       }
     },
     upload(){
-      console.log(this.files);
-      this.$bus.$emit('UploadDone');
-      this.files = []
+      if(this.files.length === 2){
+         console.log(this.files);
+        this.$bus.$emit('UploadDone');
+        this.files = []  
+      }
+      else  alert('请上传两个文件')
+     
     },
   },
 };
