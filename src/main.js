@@ -13,5 +13,8 @@ Vue.config.productionTip = false//生产模式提示是否开启
 new Vue({
   router,
   store,
+  beforeCreate(){
+    Vue.prototype.$bus=this
+  },
   render: h => h(App)
 }).$mount('#app')

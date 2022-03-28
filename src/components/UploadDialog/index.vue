@@ -13,7 +13,7 @@
       <el-main>
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="files"
           tooltip-effect="dark"
           style="width: 100%"
         >
@@ -24,11 +24,15 @@
           <el-table-column prop="size" label="大小" width="120">
           </el-table-column>
         </el-table>
+        <span class="fileinput-button">
+          <i class="el-icon-plus avatar-uploader-icon"></i>
+          <input type="file" class="el-upload" @change="submit2" accept=".png"/>
+        </span>
       </el-main>
       <el-footer>
         <el-row>
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary">上传</el-button>
+          <el-button type="primary" @click="upload">上传</el-button>
         </el-row>
       </el-footer>
     </el-container>
@@ -40,32 +44,45 @@ export default {
   name: "UploadDialog",
   data() {
     return {
-      tableData: [
-        {
-          name: "文件1",
-          size: "300MB",
-        },
-        {
-          name: "文件2",
-          size: "11MB",
-        },
-        {
-          name: "文件3",
-          size: "33MB",
-        },
-      ],
       multipleSelection: [],
+      files: [], //写文件对象数组,用于表格遍历展示
     };
   },
   methods: {
     closeDialog() {
       this.$emit("on-close");
     },
+    submit2(e) {
+      if(e.target.files[0])
+      {
+        this.imagesCount++;
+        if(this.files.length<2)  this.files.push(e.target.files[0]);
+        else alert('注意,最多两张图纸进行比较!')
+      }
+    },
+    upload(){
+      console.log(this.files);
+      this.$bus.$emit('UploadDone');
+      this.files = []
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.fileinput-button {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.fileinput-button input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  opacity: 0;
+  // -ms-filter: "alpha(opacity=0)";
+}
 .dialog {
   position: fixed;
   top: 0;
