@@ -13,22 +13,28 @@
       <el-main>
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="files"
           tooltip-effect="dark"
           style="width: 100%"
+          @selection-change="handleSelectionChange"
+          @select="select1"
         >
-          <el-table-column type="selection" width="55"> </el-table-column>
-          <el-table-column type="index" label="序号" width="120">
+          <el-table-column type="selection" width="55"  > </el-table-column>
+          <el-table-column type="index" label="序号" width="120" >
           </el-table-column>
           <el-table-column prop="name" label="文件名"> </el-table-column>
           <el-table-column prop="size" label="大小" width="120">
           </el-table-column>
         </el-table>
+        <span class="fileinput-button">
+          <i class="el-icon-plus avatar-uploader-icon"></i>
+          <input type="file" class="el-upload" @change="submit2" accept="application/pdf"/>
+        </span>
       </el-main>
       <el-footer>
         <el-row>
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary">上传</el-button>
+          <el-button type="primary" @click="upload">上传</el-button>
         </el-row>
       </el-footer>
     </el-container>
@@ -40,32 +46,55 @@ export default {
   name: "UploadDialog",
   data() {
     return {
-      tableData: [
-        {
-          name: "文件1",
-          size: "300MB",
-        },
-        {
-          name: "文件2",
-          size: "11MB",
-        },
-        {
-          name: "文件3",
-          size: "33MB",
-        },
-      ],
       multipleSelection: [],
+      files: [], //写文件对象数组,用于表格遍历展示
+      fileList:[]//用于传输file数组给后端
     };
   },
   methods: {
+    // 勾选的文件时把对应的文件对象给fileList
+    select1(select,row){
+      this.fileList.push(row);
+    },
     closeDialog() {
       this.$emit("on-close");
     },
+    // 客户上传文件时，传给files数组存储，渲染上去
+    submit2(e) {
+      if(e.target.files[0])
+      {
+          this.files.push(e.target.files[0]);
+      }
+    },
+    // 确定最终上传的文件对象数组
+    upload(){
+      if(this.fileList.length === 2){
+        this.$bus.$emit('UploadDone');
+      }
+      else  alert('请上传两个文件')
+     
+    },
+    handleSelectionChange(val) {
+        this.multipleSelection = val;
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.fileinput-button {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.fileinput-button input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  opacity: 0;
+  // -ms-filter: "alpha(opacity=0)";
+}
 .dialog {
   position: fixed;
   top: 0;

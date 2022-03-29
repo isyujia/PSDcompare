@@ -45,7 +45,6 @@
       </el-row>
       <el-row class="pay-type-switch">
         <el-col :span="24">
-          <el-button>微信</el-button>
           <el-button>支付宝</el-button>
         </el-col>
       </el-row>
@@ -77,11 +76,13 @@ export default {
   components: {
     BaseDialog,
   },
+  props:["IsPayDialogShow"],
   methods: {
     closeDialog() {
       this.$emit("on-close");
-    },
-  },
+    }
+   },
+  
   data() {
     return {
       publicPath: process.env.BASE_URL,

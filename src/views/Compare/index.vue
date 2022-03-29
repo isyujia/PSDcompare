@@ -321,7 +321,7 @@
       v-show="IsUploadDialogShow"
       @on-close="closeUploadDialog"
     ></upload-dialog>
-    <pay-dialog v-show="IsPayDialogShow" @on-close="closePayDialog"></pay-dialog>
+    <pay-dialog v-show="IsPayDialogShow" @on-close="closePayDialog" :IsPayDialogShow="this.IsPayDialogShow"></pay-dialog>
   </el-container>
 </template>
 
@@ -359,7 +359,14 @@ export default {
     closePayDialog() {
         this.IsPayDialogShow=false
     },
+    
   },
+   mounted(){
+        this.$bus.$on('UploadDone',()=>{
+        this.IsPayDialogShow=!this.IsPayDialogShow
+        console.log("adqadawd",this.IsPayDialogShow) 
+        })
+   },
 };
 </script>
 
