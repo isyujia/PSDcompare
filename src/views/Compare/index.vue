@@ -321,52 +321,53 @@
       v-show="IsUploadDialogShow"
       @on-close="closeUploadDialog"
     ></upload-dialog>
-    <pay-dialog v-show="IsPayDialogShow" @on-close="closePayDialog" :IsPayDialogShow="this.IsPayDialogShow"></pay-dialog>
+    <pay-dialog
+      v-show="IsPayDialogShow"
+      @on-close="closePayDialog"
+      :IsPayDialogShow="this.IsPayDialogShow"
+    ></pay-dialog>
   </el-container>
 </template>
 
 <script>
 console.log(process.env.BASE_URL);
 import UploadDialog from "@/components/UploadDialog";
-import PayDialog from "@/components/PayDialog"
+import PayDialog from "@/components/PayDialog";
 
 export default {
   name: "CompareIndex",
   components: {
     UploadDialog,
-    PayDialog
+    PayDialog,
   },
-  computed: {
-  },
+  computed: {},
   data() {
     return {
       publicPath: process.env.BASE_URL,
-      IsUploadDialogShow:false,
-      IsPayDialogShow:false,
-
+      IsUploadDialogShow: false,
+      IsPayDialogShow: false,
     };
   },
   methods: {
     openUploadDialog() {
-        this.IsUploadDialogShow=true
+      this.IsUploadDialogShow = true;
     },
     closeUploadDialog() {
-        this.IsUploadDialogShow=false
+      this.IsUploadDialogShow = false;
     },
     openPayDialog() {
-        this.IsPayDialogShow=true
+      this.IsPayDialogShow = true;
     },
     closePayDialog() {
-        this.IsPayDialogShow=false
+      this.IsPayDialogShow = false;
     },
-    
   },
-   mounted(){
-        this.$bus.$on('UploadDone',()=>{
-        this.IsPayDialogShow=!this.IsPayDialogShow
-        console.log("adqadawd",this.IsPayDialogShow) 
-        })
-   },
+  mounted() {
+    this.$bus.$on("UploadDone", () => {
+      this.IsPayDialogShow = !this.IsPayDialogShow;
+      console.log("adqadawd", this.IsPayDialogShow);
+    });
+  },
 };
 </script>
 
