@@ -51,8 +51,8 @@
       <el-row class="pay-qrcode">
         <el-col :span="24">
           <el-image
-            style="width: 125px; height: 125px"
-            :src="`${publicPath}/images/qrcode.png`"
+            style="width: 250px; height: 250px"
+            src="http://buchitang.top:8081/swagger-ui.html#/compare-controller/getQRCodeUsingGETnpm/url "
             fit="contain"
           ></el-image>
         </el-col>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import axios from "axios"
 import BaseDialog from "@/components/BaseDialog";
 export default {
   name: "PayDialog",
@@ -80,6 +81,15 @@ export default {
   methods: {
     closeDialog() {
       this.$emit("on-close");
+    },
+    IsPaySuccess(){
+        setInterval(()=>{
+          axios.get('http://buchitang.top:8081/swagger-ui.html#/compare-controller/getStatusUsingGET').then(response=>{
+            if(response.data.id==="VuexId"){  //等lmm里面的Vuex的Id
+                  
+            }
+          })
+        },5000)
     }
    },
   
