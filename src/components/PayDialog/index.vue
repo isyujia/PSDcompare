@@ -62,7 +62,7 @@
       <el-row>
         <el-col :span="24">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary">确定</el-button>
+          <el-button type="primary" @click="checkPaySucc">确定</el-button>
         </el-col>
       </el-row>
     </template>
@@ -76,13 +76,24 @@ export default {
   components: {
     BaseDialog,
   },
-  props:["IsPayDialogShow"],
+  props: ["IsPayDialogShow"],
   methods: {
     closeDialog() {
       this.$emit("on-close");
-    }
-   },
-  
+    },
+    checkPaySucc() {
+      let succ = true;
+      if (succ) {
+        this.$message({
+          message: "支付成功",
+          type: "success",
+        });
+        this.$emit("requestUpload");
+        this.closeDialog();
+      }
+    },
+  },
+  requestUpload() {},
   data() {
     return {
       publicPath: process.env.BASE_URL,
