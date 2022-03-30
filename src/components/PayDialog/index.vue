@@ -52,7 +52,7 @@
         <el-col :span="24">
           <el-image
             style="width: 250px; height: 250px"
-            src="http://buchitang.top:8081/swagger-ui.html#/compare-controller/getQRCodeUsingGETnpm/url "
+            :src="imgUrl"
             fit="contain"
           ></el-image>
         </el-col>
@@ -83,9 +83,14 @@ export default {
     ...mapState({id:'files.fileMsg.data.id'}),
     ...mapState({code:'files.fileMsg.data.code'}),
   },
+  mounted(){
+  },
   methods: {
     closeDialog() {
       this.$emit("on-close");
+    },
+    formatDatetime(datetime) {
+      return new Date(datetime).format("yyyy-MM-dd hh:mm:ss");
     },
     // 支付成功
     IsPaySuccess() {
@@ -100,7 +105,7 @@ export default {
               this.$bus.$emit('paySuccess',this.$store.files.fileMsg)
             }
           });
-      }, 5000);
+      }, 1000);
     },
     // 点击确定后
     checkPaySucc() {
@@ -119,6 +124,7 @@ export default {
   data() {
     return {
       publicPath: process.env.BASE_URL,
+      imgUrl:''
     };
   },
 }

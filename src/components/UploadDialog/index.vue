@@ -33,6 +33,8 @@
             class="el-upload"
             @change="submit2"
             accept="application/pdf"
+            multiple
+            :disabled="fileList.length >= 2"
           />
         </span>
       </el-main>
@@ -57,9 +59,7 @@ export default {
     };
   },
   mounted() {
-    this.$bus.$on("requestUpload", function () {
-    });
-    
+    this.$bus.$on("requestUpload", function () {});
   },
   methods: {
     // 勾选的文件时把对应的文件对象给fileList
@@ -71,9 +71,20 @@ export default {
     },
     // 客户上传文件时，传给files数组存储，渲染上去
     submit2(e) {
-      if (e.target.files[0]) {
-        this.files.push(e.target.files[0]);
-        this.fileList.push(e.target.files[0]);
+      if (e.target.files.length) {
+        for (let f of e.target.files) {
+          console.log(f);
+          this.files.push({
+            name: f.name,
+            size: `${Math.round(f.size / 1024)}KB`,
+          });
+          this.fileList.push({
+            name: f.name,
+            size: `${Math.round(f.size / 1024)}KB`,
+          });
+        }
+        // this.files = this.files.concat(e.target.files);
+        // this.fileList = this.fileList.concat(e.target.files);
       }
     },
     requestUpload() {},
@@ -81,7 +92,7 @@ export default {
     upload() {
       if (this.fileList.length === 2) {
         this.$bus.$emit("UploadDone");
-      } else alert("请上传两个文件");
+      } else this.$message.error("请上传两个文件");
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
