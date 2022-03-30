@@ -9,6 +9,7 @@
           <el-input
             placeholder="请输入内容"
             v-model="searchText"
+            @change="freshTable"
             clearable
           ></el-input>
         </el-col>
@@ -23,11 +24,12 @@
             range-separator="~"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            @change="freshTable"
           >
           </el-date-picker>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary">重置</el-button>
+          <el-button type="primary" @click="clearAll">重置</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -95,12 +97,11 @@
         <el-col :span="24">
           <el-pagination
             :page-sizes="pageSizes"
-            :page-size="pageSize"
+            :page-size.sync="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
-            :prev-click="prevClick"
-            :next-click="nextClick"
-            :current-change="currentPageChange"
+            @current-change="freshTable"
+            @size-change="freshTable"
             :current-page.sync="currentPage"
             background
           >
@@ -119,11 +120,16 @@ export default {
   components: {},
   computed: {},
   methods: {
+    clearAll() {
+      this.searchText = null;
+      this.daterange = null;
+      this.freshTable();
+    },
     handleEdit(index, row) {
-      console.log(index, row);
+      // console.log(index, row);
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      // console.log(index, row);
     },
     formatDatetime(datetime) {
       return new Date(datetime).format("yyyy-MM-dd hh:mm:ss");
@@ -142,40 +148,24 @@ export default {
         startTime,
         endTime,
       });
-      console.log(result);
+      // console.log(result);
       this.tableData = result.data.data.data;
       this.total = parseInt(result.data.data.total);
       return result;
     },
-    prevClick(currentPage) {
-      console.log(currentPage==undefined)
-      // this.getHistoryList({
-      //   pageSize: this.pageSize,
-      //   currentPage: this.currentPage,
-      //   keywords: "",
-      //   startTime: "",
-      //   endTime: "",
-      // });
-    },
-    currentPageChange() {
-      console.log(this.currentPage)
-      // this.getHistoryList({
-      //   pageSize: this.pageSize,
-      //   currentPage: this.currentPage,
-      //   keywords: "",
-      //   startTime: "",
-      //   endTime: "",
-      // });
-    },
-    nextClick(currentPage) {
-      console.log(currentPage)
-      // this.getHistoryList({
-      //   pageSize: this.pageSize,
-      //   currentPage: this.currentPage,
-      //   keywords: "",
-      //   startTime: "",
-      //   endTime: "",
-      // });
+    freshTable() {
+      let startT, endT;
+      if (this.daterange !== null) {
+        startT = this.formatDatetime(this.daterange[0]);
+        endT = this.formatDatetime(this.daterange[1]);
+      }
+      this.getHistoryList({
+        pageSize: this.pageSize,
+        currentPage: this.currentPage,
+        keywords: this.searchText,
+        startTime: startT ? startT : "",
+        endTime: endT ? endT : "",
+      });
     },
   },
   mounted() {
