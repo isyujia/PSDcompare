@@ -62,7 +62,7 @@
       <el-row>
         <el-col :span="24">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary">确定</el-button>
+          <el-button type="primary" @click="isSure">确定</el-button>
         </el-col>
       </el-row>
     </template>
@@ -76,13 +76,28 @@ export default {
   components: {
     BaseDialog,
   },
-  props:["IsPayDialogShow"],
+  // 请求后台二维码
+  mounted() {},
+  props: ["IsPayDialogShow"],
   methods: {
     closeDialog() {
       this.$emit("on-close");
-    }
-   },
-  
+    },
+    // 点击确定后
+    // 判断文件接口
+    isSure() {
+      this.$http
+        .post("", { id: "001", files: this.$store.state.files})
+        .then(
+          (res) => {
+            console.log("上传文件接口返回了的数据",res.data);
+          },
+          (err) => {
+            console.log(err.message);
+          }
+        );
+    },
+  },
   data() {
     return {
       publicPath: process.env.BASE_URL,
