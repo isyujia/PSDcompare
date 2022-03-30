@@ -9,9 +9,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 引入axios框架
 import axios from 'axios'
 
+import * as API from '@/api';
 
 Vue.use(element)
-Vue.prototype.$http = axios;
 Vue.config.productionTip = false//生产模式提示是否开启
 
 new Vue({
@@ -19,6 +19,8 @@ new Vue({
   store,
   beforeCreate(){
     Vue.prototype.$bus=this
+    Vue.prototype.$http = axios
+    Vue.prototype.$api = API
   },
   render: h => h(App)
 }).$mount('#app')

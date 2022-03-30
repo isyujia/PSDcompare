@@ -89,10 +89,12 @@
       <el-row class="pagination">
         <el-col :span="24">
           <el-pagination
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :page-sizes="pageSizes"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+            :total="total"
+            :prev-text="prevClick()"
+            :next-text="nextClick()"
             background
           >
           </el-pagination>
@@ -116,12 +118,31 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
     },
+    async getHistoryList() {
+      let result = await this.$api.SearchHistory(1, 10, "", "", "");
+      console.log(result);
+      this.tableData = result.data.data.list;
+      this.total = result.data.total;
+      return result;
+    },
+    prevClick(a){
+      console.log(a)
+    },
+    nextClick(){
+
+    }
+  },
+  mounted() {
+    this.getHistoryList();
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
       daterange: "",
       searchText: "",
+      pageSizes: [100, 200, 300, 400],
+      pageSize: 20,
+      total: 100,
       tableData: [
         {
           serial_number: "15881206583",
