@@ -72,18 +72,27 @@
 <script>
 import axios from "axios";
 import BaseDialog from "@/components/BaseDialog";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 export default {
   name: "PayDialog",
   components: {
     BaseDialog,
   },
-  props: ["IsPayDialogShow"],
-  computed:{
-    ...mapState({id:'files.fileMsg.data.id'}),
-    ...mapState({code:'files.fileMsg.data.code'}),
+  props: ["IsPayDialogShow", "work"],
+  computed: {
+    ...mapState({
+      id: "files.fileMsg.data.id",
+      code: "files.fileMsg.data.code",
+      workObj: (s) => s.compare.workObj,
+    }),
   },
-  mounted(){
+  mounted() {
+    let timer = setInterval(() => {
+      if (this.workObj.id) {
+        this.imgUrl = this.$api.reqQRCodeUrl(this.workObj.id);
+        clearInterval(timer);
+      }
+    }, 100);
   },
   methods: {
     closeDialog() {
@@ -102,32 +111,45 @@ export default {
           .then((response) => {
             if (response.data.id === this.id) {
               // 对比文件渲染
-              this.$bus.$emit('paySuccess',this.$store.files.fileMsg)
+              this.$bus.$emit("paySuccess", this.$store.files.fileMsg);
             }
           });
       }, 1000);
     },
     // 点击确定后
     checkPaySucc() {
-      let succ = true;
-      if (succ) {
-        this.$message({
-          message: "支付成功",
-          type: "success",
-        });
-        this.$emit("requestUpload");
-        this.closeDialog();
-      }
+      let succ = false;
+      this.$api.reqGetCompareOrderStatus(this.workObj.id).then((r) => {
+        if (r.status == 200 && r.data.message == "完成") {
+          succ = true;
+          if (succ) {
+            this.$message({
+              message: "支付成功",
+              type: "success",
+            });
+            //刷新workObj数据
+            this.$store.dispatch('freshWorkObj',this.workObj)
+            // this.$store.commit('setWorkStatus',r.data.message)
+            this.$emit("requestUpload");
+            this.closeDialog();
+          }
+        } else {
+          this.$message({
+            message: r.data.message,
+            type: "error",
+          });
+        }
+      });
     },
     requestUpload() {},
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
-      imgUrl:''
+      imgUrl: "",
     };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

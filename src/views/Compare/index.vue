@@ -437,13 +437,14 @@
       </el-container>
     </el-main>
     <upload-dialog
-      v-show="IsUploadDialogShow"
+      v-if="IsUploadDialogShow"
       @on-close="closeUploadDialog"
     ></upload-dialog>
     <pay-dialog
-      v-show="IsPayDialogShow"
+      v-if="IsPayDialogShow"
       @on-close="closePayDialog"
       :IsPayDialogShow="this.IsPayDialogShow"
+      :work="this.workObj"
     ></pay-dialog>
   </el-container>
 </template>
@@ -452,6 +453,7 @@
 console.log(process.env.BASE_URL);
 import UploadDialog from "@/components/UploadDialog";
 import PayDialog from "@/components/PayDialog";
+import { mapState } from 'vuex';
 
 export default {
   name: "CompareIndex",
@@ -466,6 +468,9 @@ export default {
     disableLoading() {
       return this.noMore || this.isLoading;
     },
+    ...mapState({
+      workObj: (s) => s.compare.workObj,
+    })
   },
   data() {
     return {
@@ -526,7 +531,6 @@ export default {
   mounted() {
     this.$bus.$on("UploadDone", () => {
       this.IsPayDialogShow = !this.IsPayDialogShow; // 响应上传后的支付页面
-      console.log("adqadawd", this.IsPayDialogShow);
     });
     this.load();
   },

@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "UploadDialog",
   data() {
@@ -56,10 +57,18 @@ export default {
       multipleSelection: [],
       files: [], //写文件对象数组,用于表格遍历展示
       fileList: [], //用于传输file数组给后端
+      fileArrayOrigin:[]
     };
   },
   mounted() {
-    this.$bus.$on("requestUpload", function () {});
+    this.$bus.$on("requestUpload", function () {
+      
+    });
+  },
+  computed: {
+    ...mapState({
+      workObj: (s) => s.compare.workObj,
+    }),
   },
   methods: {
     // 勾选的文件时把对应的文件对象给fileList
@@ -82,6 +91,7 @@ export default {
             name: f.name,
             size: `${Math.round(f.size / 1024)}KB`,
           });
+          this.fileArrayOrigin.push(f)
         }
         // this.files = this.files.concat(e.target.files);
         // this.fileList = this.fileList.concat(e.target.files);
@@ -92,6 +102,7 @@ export default {
     upload() {
       if (this.fileList.length === 2) {
         this.$bus.$emit("UploadDone");
+        this.$store.dispatch('getWorkCode')
       } else this.$message.error("请上传两个文件");
     },
     handleSelectionChange(val) {

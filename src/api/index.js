@@ -1,11 +1,29 @@
 import requests from "./axios"
-
 export const reqCompareHistory = (currentPage, PageSize) => requests({ url: `/compare/${currentPage}/${PageSize}`, type: 'get' })
 
 export const SearchHistory = ({ pageSize, currentPage, keywords, startTime, endTime }) => requests.post('/compare/search', { keyWords: keywords, maxPage: pageSize, startPage: currentPage, startTime, endTime })
 
 export const checkOrderStatus = ({ outTradeNo }) => requests.get('/order-log/checkOrderStatus', { params: { outTradeNo } })
 
-export const getWorkCode = () => requests.get('/compare/getWorkCode')
+export const reqWorkCode = () => requests.get('/compare/getWorkCode')
 
 export const selectCompareLog = (currentPage, pageSize) => requests.get(`/compare/${currentPage}/${pageSize}`)
+
+export const reqQRCodeUrl = (id) => `http://127.0.0.1:8081/compare/getQRCode?id=${id}&size=250`
+
+export const reqQRCode = (id) => requests.get(`/compare/getQRCode?id=${id}&size=250`)
+
+//轮询支付状态
+export const reqGetCompareOrderStatus = (compareId) => requests.get('/compare/getStatus', { params: { id: compareId } })
+
+//刷新workObj对象，获取两个文件码
+export const reqFreshWorkObj = (id) => requests.get(`/compare/getFileCodes`, { params: { id } })
+
+//上传对比文件
+export const reqUploadFile = ({ file, workcode, filecode }) => requests.post('/cadpare/upload', { file, workcode, filecode }, { baseURL: 'http://139.9.203.100:9721' })
+
+//查询对比状态
+export const reqCompareStatus = (workcode) => requests.get('/cadpare/status', { params: { workcode } })
+
+//启动对比任务
+export const reqStartCompare = ({ workcode, pair }) => requests.post('/cadpare/start', { workcode, pair })
