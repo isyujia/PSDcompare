@@ -51,8 +51,8 @@
       <el-row class="pay-qrcode">
         <el-col :span="24">
           <el-image
-            style="width: 125px; height: 125px"
-            :src="`${publicPath}/images/qrcode.png`"
+            style="width: 250px; height: 250px"
+            src="http://buchitang.top:8081/swagger-ui.html#/compare-controller/getQRCodeUsingGETnpm/url "
             fit="contain"
           ></el-image>
         </el-col>
@@ -62,7 +62,11 @@
       <el-row>
         <el-col :span="24">
           <el-button @click="closeDialog">取消</el-button>
+<<<<<<< HEAD
           <el-button type="primary" @click="isSure">确定</el-button>
+=======
+          <el-button type="primary" @click="checkPaySucc">确定</el-button>
+>>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
         </el-col>
       </el-row>
     </template>
@@ -70,19 +74,24 @@
 </template>
 
 <script>
+import axios from "axios"
 import BaseDialog from "@/components/BaseDialog";
 export default {
   name: "PayDialog",
   components: {
     BaseDialog,
   },
+<<<<<<< HEAD
   // 请求后台二维码
   mounted() {},
+=======
+>>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
   props: ["IsPayDialogShow"],
   methods: {
     closeDialog() {
       this.$emit("on-close");
     },
+<<<<<<< HEAD
     // 点击确定后
     // 判断文件接口
     isSure() {
@@ -98,6 +107,35 @@ export default {
         );
     },
   },
+=======
+<<<<<<< HEAD
+    IsPaySuccess(){
+        setInterval(()=>{
+          axios.get('http://buchitang.top:8081/swagger-ui.html#/compare-controller/getStatusUsingGET').then(response=>{
+            if(response.data.id==="VuexId"){  //等lmm里面的Vuex的Id
+                  
+            }
+          })
+        },5000)
+    }
+   },
+  
+=======
+    checkPaySucc() {
+      let succ = true;
+      if (succ) {
+        this.$message({
+          message: "支付成功",
+          type: "success",
+        });
+        this.$emit("requestUpload");
+        this.closeDialog();
+      }
+    },
+  },
+  requestUpload() {},
+>>>>>>> d6a49f7f90a53cab894ea028cbb4ff0976a16c5e
+>>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
   data() {
     return {
       publicPath: process.env.BASE_URL,

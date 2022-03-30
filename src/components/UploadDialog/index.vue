@@ -57,10 +57,19 @@ export default {
       fileList: [], //用于传输file数组给后端
     };
   },
+  mounted() {
+    this.$bus.$on("requestUpload", function () {
+    });
+  },
   methods: {
     // 勾选的文件时把对应的文件对象给fileList
+<<<<<<< HEAD
     select1(select) {
       this.fileList = select;
+=======
+    select1(select, row) {
+      this.fileList.push(row);
+>>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
     },
     // vuex更改上传文件
     ...mapActions(['change']),
@@ -71,6 +80,7 @@ export default {
     submit2(e) {
       if (e.target.files[0]) {
         this.files.push(e.target.files[0]);
+<<<<<<< HEAD
       }
     },
     // 点击上传：确定最终上传的文件对象数组
@@ -80,6 +90,16 @@ export default {
         this.$bus.$emit("UploadDone");
         // 传给action
         this.change(this.fileList);
+=======
+        this.fileList.push(e.target.files[0]);
+      }
+    },
+    requestUpload() {},
+    // 确定最终上传的文件对象数组
+    upload() {
+      if (this.fileList.length === 2) {
+        this.$bus.$emit("UploadDone");
+>>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
       } else alert("请上传两个文件");
     },
     handleSelectionChange(val) {
