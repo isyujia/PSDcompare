@@ -55,7 +55,7 @@
             </div>
           </el-col>
         </el-row>
-<!--  -->
+
         <el-row class="order">
           <el-col>
             <div>
@@ -279,7 +279,6 @@
                   <div><span>0%</span></div>
                 </el-col>
               </el-row>
-    <!--  -->
             </div>
           </el-col>
         </el-row>
@@ -347,7 +346,6 @@ export default {
       publicPath: process.env.BASE_URL,
       IsUploadDialogShow: false,
       IsPayDialogShow: false,
-      fileState:[]
     };
   },
   methods: {
@@ -366,12 +364,9 @@ export default {
   },
   mounted() {
     this.$bus.$on("UploadDone", () => {
-      this.IsPayDialogShow = !this.IsPayDialogShow;
+      this.IsPayDialogShow = !this.IsPayDialogShow;// 响应上传后的支付页面
       console.log("adqadawd", this.IsPayDialogShow);
     });
-    this.$bus.$on('paySuccess',(val)=>{
-      this.fileState.push(val);
-    })
   },
 };
 </script>

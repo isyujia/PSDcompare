@@ -34,16 +34,16 @@
     <el-main class="main">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column
-          prop="serial_number"
+          prop="serialNumber"
           label="流水编号"
           width="200"
         ></el-table-column>
         <el-table-column
-          prop="compare_file_1_name"
+          prop="title"
           label="对比文件"
           width="200"
         ></el-table-column>
-        <el-table-column prop="comparison_cost" label="支付费用" width="200">
+        <el-table-column prop="fee" label="支付费用" width="200">
         </el-table-column>
         <el-table-column prop="status" label="支付状态" width="200">
           <template slot-scope="scope">
@@ -55,7 +55,7 @@
         </el-table-column>
         <el-table-column prop="status" label="支付状态" width="200">
           <template slot-scope="scope">
-            <span v-if="scope.row.status" class="dot"
+            <span v-if="scope.row.status == 'complete'" class="dot"
               ><span class="blue-dot"></span>已完成</span
             >
             <span v-else class="dot"><span class="red-dot"></span>未完成</span>
@@ -63,11 +63,16 @@
         </el-table-column>
         <el-table-column prop="status" label="支付结果" width="200">
           <template slot-scope="scope">
-            <span v-if="scope.row.status" style="color: #67c23a">成功</span>
+            <span v-if="scope.row.status == 'complete'" style="color: #67c23a"
+              >成功</span
+            >
             <span v-else style="color: #f56760">错误</span>
           </template>
         </el-table-column>
-        <el-table-column prop="create_time" label="时间" width="200">
+        <el-table-column prop="createTime" label="时间" width="200">
+          <template slot-scope="scope">
+            {{ formatDatetime(scope.row.createTime) }}
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
@@ -93,8 +98,10 @@
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
-            :prev-text="prevClick()"
-            :next-text="nextClick()"
+            :prev-click="prevClick"
+            :next-click="nextClick"
+            :current-change="currentPageChange"
+            :current-page.sync="currentPage"
             background
           >
           </el-pagination>
@@ -118,31 +125,77 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
     },
-    async getHistoryList() {
-      let result = await this.$api.SearchHistory(1, 10, "", "", "");
+    formatDatetime(datetime) {
+      return new Date(datetime).format("yyyy-MM-dd hh:mm:ss");
+    },
+    async getHistoryList({
+      pageSize,
+      currentPage,
+      keywords,
+      startTime,
+      endTime,
+    }) {
+      let result = await this.$api.SearchHistory({
+        pageSize,
+        currentPage,
+        keywords,
+        startTime,
+        endTime,
+      });
       console.log(result);
-      this.tableData = result.data.data.list;
-      this.total = result.data.total;
+      this.tableData = result.data.data.data;
+      this.total = parseInt(result.data.data.total);
       return result;
     },
-    prevClick(a){
-      console.log(a)
+    prevClick(currentPage) {
+      console.log(currentPage==undefined)
+      // this.getHistoryList({
+      //   pageSize: this.pageSize,
+      //   currentPage: this.currentPage,
+      //   keywords: "",
+      //   startTime: "",
+      //   endTime: "",
+      // });
     },
-    nextClick(){
-
-    }
+    currentPageChange() {
+      console.log(this.currentPage)
+      // this.getHistoryList({
+      //   pageSize: this.pageSize,
+      //   currentPage: this.currentPage,
+      //   keywords: "",
+      //   startTime: "",
+      //   endTime: "",
+      // });
+    },
+    nextClick(currentPage) {
+      console.log(currentPage)
+      // this.getHistoryList({
+      //   pageSize: this.pageSize,
+      //   currentPage: this.currentPage,
+      //   keywords: "",
+      //   startTime: "",
+      //   endTime: "",
+      // });
+    },
   },
   mounted() {
-    this.getHistoryList();
+    this.getHistoryList({
+      pageSize: 10,
+      currentPage: this.currentPage,
+      keywords: "",
+      startTime: "",
+      endTime: "",
+    });
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
       daterange: "",
       searchText: "",
-      pageSizes: [100, 200, 300, 400],
-      pageSize: 20,
+      pageSizes: [10, 20, 30, 40],
+      pageSize: 10,
       total: 100,
+      currentPage: 1,
       tableData: [
         {
           serial_number: "15881206583",

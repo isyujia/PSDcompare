@@ -16,7 +16,8 @@
           :data="files"
           tooltip-effect="dark"
           style="width: 100%"
-          @selection-change="select1"
+          @selection-change="handleSelectionChange"
+          @select="select1"
         >
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column type="index" label="序号" width="120">
@@ -46,8 +47,6 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
-
 export default {
   name: "UploadDialog",
   data() {
@@ -60,14 +59,13 @@ export default {
   mounted() {
     this.$bus.$on("requestUpload", function () {
     });
+    
   },
   methods: {
     // 勾选的文件时把对应的文件对象给fileList
-    select1(select) {
-      this.fileList = select;
+    select1(select, row) {
+      this.fileList.push(row);
     },
-    // vuex更改上传文件
-    ...mapActions(['change']),
     closeDialog() {
       this.$emit("on-close");
     },
@@ -75,15 +73,14 @@ export default {
     submit2(e) {
       if (e.target.files[0]) {
         this.files.push(e.target.files[0]);
+        this.fileList.push(e.target.files[0]);
       }
     },
-    // 点击上传：确定最终上传的文件对象数组
+    requestUpload() {},
+    // 确定最终上传的文件对象数组
     upload() {
       if (this.fileList.length === 2) {
-        // 跳转支付页面
         this.$bus.$emit("UploadDone");
-        // 传给action
-        this.change(this.fileList);
       } else alert("请上传两个文件");
     },
     handleSelectionChange(val) {
