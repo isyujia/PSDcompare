@@ -62,11 +62,7 @@
       <el-row>
         <el-col :span="24">
           <el-button @click="closeDialog">取消</el-button>
-<<<<<<< HEAD
-          <el-button type="primary" @click="isSure">确定</el-button>
-=======
           <el-button type="primary" @click="checkPaySucc">确定</el-button>
->>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
         </el-col>
       </el-row>
     </template>
@@ -74,53 +70,39 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 import BaseDialog from "@/components/BaseDialog";
+import { mapState } from 'vuex';
 export default {
   name: "PayDialog",
   components: {
     BaseDialog,
   },
-<<<<<<< HEAD
-  // 请求后台二维码
-  mounted() {},
-=======
->>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
   props: ["IsPayDialogShow"],
+  computed:{
+    ...mapState({id:'files.fileMsg.data.id'}),
+    ...mapState({code:'files.fileMsg.data.code'}),
+  },
   methods: {
     closeDialog() {
       this.$emit("on-close");
     },
-<<<<<<< HEAD
-    // 点击确定后
-    // 判断文件接口
-    isSure() {
-      this.$http
-        .post("", { id: "001", files: this.$store.state.files})
-        .then(
-          (res) => {
-            console.log("上传文件接口返回了的数据",res.data);
-          },
-          (err) => {
-            console.log(err.message);
-          }
-        );
-    },
-  },
-=======
-<<<<<<< HEAD
-    IsPaySuccess(){
-        setInterval(()=>{
-          axios.get('http://buchitang.top:8081/swagger-ui.html#/compare-controller/getStatusUsingGET').then(response=>{
-            if(response.data.id==="VuexId"){  //等lmm里面的Vuex的Id
-                  
+    // 支付成功
+    IsPaySuccess() {
+      setInterval(() => {
+        axios
+          .get(
+            "http://buchitang.top:8081/swagger-ui.html#/compare-controller/getStatusUsingGET"
+          )
+          .then((response) => {
+            if (response.data.id === this.id) {
+              // 对比文件渲染
+              this.$bus.$emit('paySuccess',this.$store.files.fileMsg)
             }
-          })
-        },5000)
-    }
-   },
-  
-=======
+          });
+      }, 5000);
+    },
+    // 点击确定后
     checkPaySucc() {
       let succ = true;
       if (succ) {
@@ -132,16 +114,14 @@ export default {
         this.closeDialog();
       }
     },
+    requestUpload() {},
   },
-  requestUpload() {},
->>>>>>> d6a49f7f90a53cab894ea028cbb4ff0976a16c5e
->>>>>>> d59f7edff9ae124fd3c48fd84d312bf25c838df9
   data() {
     return {
       publicPath: process.env.BASE_URL,
     };
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

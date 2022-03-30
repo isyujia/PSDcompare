@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    files:{},//上传比较的文件
+    files:{},//上传比较的文件,属性：fileMsg存放要后台请求的工作码，id/fileContent存对比的文件对象
   },
   getters: {
   },
@@ -20,10 +20,11 @@ export default new Vuex.Store({
   },
   actions: {
     change(context,val){
-      context.state.files.fileCount = val;
+      context.state.files.fileContent = val;
       // 请求工作码和id,给state的files的属性fileMsg
       axios.get('http://buchitang.top:8081/compare/getWorkCode').then(
         res=>{
+          console.log("请求的工作码是：",res.data);
           context.commit('CHANGE',res.data);
         }
       )
