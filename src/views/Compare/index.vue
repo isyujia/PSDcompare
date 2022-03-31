@@ -19,7 +19,7 @@
           infinite-scroll-disabled="disableLoading"
           infinite-scroll-immediate="false"
         >
-          <li v-for="(val) in compareLogData" :key="val.id">
+          <li v-for="val in compareLogData" :key="val.id">
             <el-row class="order">
               <el-col>
                 <div>
@@ -109,7 +109,9 @@
 
                   <el-row v-else>
                     <el-col class="more">
-                      <span class="fold" @click="foldItem(val.id)">查看更多 </span>
+                      <span class="fold" @click="foldItem(val.id)"
+                        >查看更多
+                      </span>
                       <svg-icon icon-class="angle-bottom"></svg-icon>
                     </el-col>
                   </el-row>
@@ -123,283 +125,6 @@
           <li v-if="noMore">
             <p>没有更多了</p>
           </li>
-          <!--           
-          <li>
-            <el-row class="order">
-              <el-col>
-                <div>
-                  <el-row>
-                    <el-col :span="16">
-                      <span class="notice">名称：</span>
-                      <span>132</span>
-                    </el-col>
-
-                    <el-col :span="4" class="compare">
-                      <a href="#">对比</a>
-                    </el-col>
-
-                    <el-col :span="4" class="download">
-                      <a href="#">下载</a>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">状态：</span>
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">时间：</span>
-                      <span>2022/2/22 12:00:00</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col class="more">
-                      <span>查看更多 </span>
-                      <svg-icon icon-class="angle-bottom"></svg-icon>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-col>
-            </el-row>
-          </li>
-
-          <li>
-            <el-row class="order">
-              <el-col>
-                <div>
-                  <el-row>
-                    <el-col :span="16">
-                      <span class="notice">名称：</span>
-                      <span>132</span>
-                    </el-col>
-
-                    <el-col :span="4" class="compare">
-                      <a href="#">对比</a>
-                    </el-col>
-
-                    <el-col :span="4" class="download">
-                      <a href="#">下载</a>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">状态：</span>
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">时间：</span>
-                      <span>2022/2/22 12:00:00</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col class="spilit-line">
-                      <span></span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件1.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件2.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="normal">无差异</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="time-line">
-                    <el-col :span="2">
-                      <svg-icon icon-class="clock"></svg-icon>
-                    </el-col>
-                    <el-col :span="19">
-                      <el-progress
-                        :percentage="50"
-                        :stroke-width="10"
-                        :show-text="false"
-                      >
-                      </el-progress>
-                    </el-col>
-                    <el-col :span="3">
-                      <div><span>50%</span></div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-col>
-            </el-row>
-          </li>
-
-          <li>
-            <el-row class="order">
-              <el-col>
-                <div>
-                  <el-row>
-                    <el-col :span="16">
-                      <span class="notice">名称：</span>
-                      <span>132</span>
-                    </el-col>
-
-                    <el-col :span="4" class="compare">
-                      <a href="#">对比</a>
-                    </el-col>
-
-                    <el-col :span="4" class="download">
-                      <a href="#">下载</a>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">状态：</span>
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">时间：</span>
-                      <span>2022/2/22 12:00:00</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col class="spilit-line">
-                      <span></span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件1.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件2.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="normal">无差异</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="time-line">
-                    <el-col :span="2">
-                      <svg-icon icon-class="play"></svg-icon>
-                    </el-col>
-                    <el-col :span="19">
-                      <el-progress
-                        :percentage="0"
-                        :stroke-width="10"
-                        :show-text="false"
-                      >
-                      </el-progress>
-                    </el-col>
-                    <el-col :span="3">
-                      <div><span>0%</span></div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-col>
-            </el-row>
-          </li>
-          <li>
-            <el-row class="order">
-              <el-col>
-                <div>
-                  <el-row>
-                    <el-col :span="16">
-                      <span class="notice">名称：</span>
-                      <span>132</span>
-                    </el-col>
-
-                    <el-col :span="4" class="compare">
-                      <a href="#">对比</a>
-                    </el-col>
-
-                    <el-col :span="4" class="download">
-                      <a href="#">下载</a>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">状态：</span>
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col>
-                      <span class="notice">时间：</span>
-                      <span>2022/2/22 12:00:00</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col class="spilit-line">
-                      <span></span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件1.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="success">已完成</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="file-list">
-                    <el-col :span="20">
-                      <span>预制件2.pdf</span>
-                    </el-col>
-                    <el-col :span="4">
-                      <span class="normal">无差异</span>
-                    </el-col>
-                  </el-row>
-
-                  <el-row class="time-line">
-                    <el-col :span="2">
-                      <svg-icon icon-class="play"></svg-icon>
-                    </el-col>
-                    <el-col :span="19">
-                      <el-progress
-                        :percentage="0"
-                        :stroke-width="10"
-                        :show-text="false"
-                      >
-                      </el-progress>
-                    </el-col>
-                    <el-col :span="3">
-                      <div><span>0%</span></div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-col>
-            </el-row>
-          </li> -->
         </ul>
       </div>
     </el-aside>
@@ -431,7 +156,7 @@
         </el-header>
         <el-main>
           <div class="right-main-img">
-            <img :src="`${publicPath}images/251.png`" alt="" />
+            <img :src="getCompareResultUrl()" alt="" />
           </div>
         </el-main>
       </el-container>
@@ -453,7 +178,7 @@
 console.log(process.env.BASE_URL);
 import UploadDialog from "@/components/UploadDialog";
 import PayDialog from "@/components/PayDialog";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "CompareIndex",
@@ -470,7 +195,7 @@ export default {
     },
     ...mapState({
       workObj: (s) => s.compare.workObj,
-    })
+    }),
   },
   data() {
     return {
@@ -485,9 +210,44 @@ export default {
       isFoldArray: [],
     };
   },
+  beforeCreate() {
+    this.$bus.$on("startCheckCompareWorkTimer", () => {
+      this.$api
+        .reqStartCompare({
+          workcode: this.workObj.workCode,
+          pair: [this.workObj.fileCode1, this.workObj.fileCode2].join(":"),
+        })
+        .then((r) => {
+          if (r.data.errcode == 0)
+            this.$message({
+              message: "启动任务成功",
+              type: "success",
+            });
+        });
+      let timer = setInterval(() => {
+        this.$api.reqCompareStatus(this.workObj.workCode).then((r) => {
+          if (r.data.errcode == 0 && r.data.data.urls.length > 0) {
+            this.$message({
+              message: "对比成功",
+              type: "success",
+            });
+            this.$store.dispatch("freshCompareWorkStatus", r.data.data.urls[0]);
+            console.log(r);
+            this.closeUploadDialog();
+            clearInterval(timer);
+          }
+        });
+      }, 1000);
+    });
+  },
   methods: {
     openUploadDialog() {
       this.IsUploadDialogShow = true;
+    },
+    getCompareResultUrl() {
+      return !("workObj" in this) || !("compareResultUrl" in this.workObj)
+        ? `${this.publicPath}images/251.png`
+        : this.workObj.compareResultUrl;
     },
     foldItem(id) {
       this.isFoldArray.splice(id, 1, !this.isFoldArray[id]);

@@ -23,7 +23,7 @@ export default {
         },
         setWorkStatus(state, status) {
             state.workObj.status = status
-        }
+        },
     },
     actions: {
         getWorkCode(context) {
@@ -40,6 +40,11 @@ export default {
                     context.commit('setWorkObj', r.data.data)
                 }
             })
+        },
+        freshCompareWorkStatus(context, compareResultUrl) {
+            let o = context.state.workObj;
+            o.compareResultUrl = compareResultUrl
+            context.commit('setWorkObj', o)
         }
     },
     getters: {

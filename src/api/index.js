@@ -20,10 +20,16 @@ export const reqGetCompareOrderStatus = (compareId) => requests.get('/compare/ge
 export const reqFreshWorkObj = (id) => requests.get(`/compare/getFileCodes`, { params: { id } })
 
 //上传对比文件
-export const reqUploadFile = ({ file, workcode, filecode }) => requests.post('/cadpare/upload', { file, workcode, filecode }, { baseURL: 'http://139.9.203.100:9721' })
+export const reqUploadFile = ({ file, workcode, filecode }) => {
+    let form = new FormData()
+    form.append('file', file)
+    form.append('workcode', workcode)
+    form.append('filecode', filecode)
+    return requests.post('/cadpare/upload', form, { baseURL: 'http://139.9.203.100:9721' })
+}
 
 //查询对比状态
-export const reqCompareStatus = (workcode) => requests.get('/cadpare/status', { params: { workcode } })
+export const reqCompareStatus = (workcode) => requests.get('/cadpare/status', { params: { workcode }, baseURL: 'http://139.9.203.100:9721' })
 
 //启动对比任务
-export const reqStartCompare = ({ workcode, pair }) => requests.post('/cadpare/start', { workcode, pair })
+export const reqStartCompare = ({ workcode, pair }) => requests.post('/cadpare/start', { workcode, pair }, { baseURL: 'http://139.9.203.100:9721' })

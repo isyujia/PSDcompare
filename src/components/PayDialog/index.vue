@@ -128,9 +128,9 @@ export default {
               type: "success",
             });
             //刷新workObj数据
-            this.$store.dispatch('freshWorkObj',this.workObj)
+            this.$store.dispatch('freshWorkObj',this.workObj.id)
             // this.$store.commit('setWorkStatus',r.data.message)
-            this.$emit("requestUpload");
+            this.$bus.$emit("requestUpload");
             this.closeDialog();
           }
         } else {
@@ -141,7 +141,6 @@ export default {
         }
       });
     },
-    requestUpload() {},
   },
   data() {
     return {

@@ -35,6 +35,7 @@
             accept="application/pdf"
             multiple
             :disabled="fileList.length >= 2"
+            ref="inputFile"
           />
         </span>
       </el-main>
@@ -57,12 +58,48 @@ export default {
       multipleSelection: [],
       files: [], //写文件对象数组,用于表格遍历展示
       fileList: [], //用于传输file数组给后端
-      fileArrayOrigin:[]
+      fileArrayOrigin: [],
     };
   },
-  mounted() {
-    this.$bus.$on("requestUpload", function () {
-      
+  beforeCreate() {
+    this.$bus.$on("requestUpload", () => {
+      this.$message({
+        message: "正在上传",
+        type: "info",
+      });
+      let timer = setInterval(() => {
+        if (this.workObj.fileCode1 != null) {
+          this.$api
+            .reqUploadFile({
+              file: this.$refs.inputFile.files[0],
+              workcode: this.workObj.workCode,
+              filecode: this.workObj.fileCode1,
+            })
+            .then((r) => {
+              this.$api
+                .reqUploadFile({
+                  file: this.$refs.inputFile.files[1],
+                  workcode: this.workObj.workCode,
+                  filecode: this.workObj.fileCode2,
+                })
+                .then((rr) => {
+                  if (rr.status == 200 && r.status == 200) {
+                    this.$message({
+                      message: "上传成功",
+                      type: "success",
+                    });
+                    this.$bus.$emit("startCheckCompareWorkTimer");
+                  } else {
+                    this.$message({
+                      message: "系统正忙",
+                      type: "error",
+                    });
+                  }
+                });
+            });
+          clearInterval(timer);
+        }
+      }, 100);
     });
   },
   computed: {
@@ -91,7 +128,7 @@ export default {
             name: f.name,
             size: `${Math.round(f.size / 1024)}KB`,
           });
-          this.fileArrayOrigin.push(f)
+          this.fileArrayOrigin.push(f);
         }
         // this.files = this.files.concat(e.target.files);
         // this.fileList = this.fileList.concat(e.target.files);
@@ -102,7 +139,7 @@ export default {
     upload() {
       if (this.fileList.length === 2) {
         this.$bus.$emit("UploadDone");
-        this.$store.dispatch('getWorkCode')
+        this.$store.dispatch("getWorkCode");
       } else this.$message.error("请上传两个文件");
     },
     handleSelectionChange(val) {
