@@ -113,8 +113,6 @@
 </template>
 
 <script>
-console.log(process.env.BASE_URL);
-
 export default {
   name: "HistoryIndex",
   components: {},
@@ -148,14 +146,14 @@ export default {
         startTime,
         endTime,
       });
-      // console.log(result);
-      this.tableData = result.data.data.data;
+      console.log(result);
+      this.tableData = result.data.data.records;
       this.total = parseInt(result.data.data.total);
       return result;
     },
     freshTable() {
       let startT, endT;
-      if (this.daterange !== null) {
+      if (this.daterange != "") {
         startT = this.formatDatetime(this.daterange[0]);
         endT = this.formatDatetime(this.daterange[1]);
       }
@@ -169,13 +167,7 @@ export default {
     },
   },
   mounted() {
-    this.getHistoryList({
-      pageSize: 10,
-      currentPage: this.currentPage,
-      keywords: "",
-      startTime: "",
-      endTime: "",
-    });
+    this.freshTable()
   },
   data() {
     return {

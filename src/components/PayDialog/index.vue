@@ -123,12 +123,16 @@ export default {
         if (r.status == 200 && r.data.message == "完成") {
           succ = true;
           if (succ) {
-            this.$message({
+            // this.$message({
+            //   message: "支付成功",
+            //   type: "success",
+            // });
+            this.$notify.success({
+              title: "成功",
               message: "支付成功",
-              type: "success",
             });
             //刷新workObj数据
-            this.$store.dispatch('freshWorkObj',this.workObj.id)
+            this.$store.dispatch("freshWorkObj", this.workObj.id);
             // this.$store.commit('setWorkStatus',r.data.message)
             this.$bus.$emit("requestUpload");
             this.closeDialog();

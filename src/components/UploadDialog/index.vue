@@ -63,9 +63,13 @@ export default {
   },
   beforeCreate() {
     this.$bus.$on("requestUpload", () => {
-      this.$message({
+      // this.$message({
+      //   message: "正在上传",
+      //   type: "info",
+      // });
+      this.$notify.info({
+        title: "提示",
         message: "正在上传",
-        type: "info",
       });
       let timer = setInterval(() => {
         if (this.workObj.fileCode1 != null) {
@@ -84,16 +88,24 @@ export default {
                 })
                 .then((rr) => {
                   if (rr.status == 200 && r.status == 200) {
-                    this.$message({
+                    // this.$message({
+                    //   message: "上传成功",
+                    //   type: "success",
+                    // });
+                    this.$notify.success({
+                      title: "成功",
                       message: "上传成功",
-                      type: "success",
                     });
                     this.$bus.$emit("startCheckCompareWorkTimer");
                   } else {
-                    this.$message({
+                    this.$notify.error({
+                      title: "错误",
                       message: "系统正忙",
-                      type: "error",
                     });
+                    // this.$message({
+                    //   message: "系统正忙",
+                    //   type: "error",
+                    // });
                   }
                 });
             });

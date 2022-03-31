@@ -32,11 +32,11 @@
                     </el-col>
 
                     <el-col :span="4" class="compare">
-                      <a href="#">对比</a>
+                      <a @click="gotoCompareResult(val.id)">对比</a>
                     </el-col>
 
                     <el-col :span="4" class="download">
-                      <a href="#">下载</a>
+                      <a @click="downloadCompareResult(val.id)">下载</a>
                     </el-col>
                   </el-row>
 
@@ -156,7 +156,7 @@
         </el-header>
         <el-main>
           <div class="right-main-img">
-            <img :src="getCompareResultUrl()" alt="" />
+            <img :src="compareImgUrl" alt="" />
           </div>
         </el-main>
       </el-container>
@@ -175,7 +175,6 @@
 </template>
 
 <script>
-console.log(process.env.BASE_URL);
 import UploadDialog from "@/components/UploadDialog";
 import PayDialog from "@/components/PayDialog";
 import { mapState } from "vuex";
@@ -203,12 +202,19 @@ export default {
       IsUploadDialogShow: false,
       IsPayDialogShow: false,
       compareLogData: [], //数据条目
-      currentPage: 1,
+      currentPage: 0,
       pageSize: 3, //每页数据总数
       totalPages: 0, //总页数
       isLoading: false, //是否在加载中，绑定给loading图标用
       isFoldArray: [],
+      compareImgUrl: "",
     };
+  },
+  beforeUpdate() {
+    if (this.compareImgUrl == "") {
+      let url = process.env.BASE_URL + "images/251.png";
+      this.compareImgUrl = url;
+    }
   },
   beforeCreate() {
     this.$bus.$on("startCheckCompareWorkTimer", () => {
@@ -225,22 +231,49 @@ export default {
             });
         });
       let timer = setInterval(() => {
-        this.$api.reqCompareStatus(this.workObj.workCode).then((r) => {
-          if (r.data.errcode == 0 && r.data.data.urls.length > 0) {
+        this.$api
+          .reqAndRreshCompareWorkStatus(this.workObj.workCode)
+          .then(() => {
             this.$message({
               message: "对比成功",
               type: "success",
             });
-            this.$store.dispatch("freshCompareWorkStatus", r.data.data.urls[0]);
-            console.log(r);
+            this.compareImgUrl = this.workObj.compareResultUrl;
             this.closeUploadDialog();
             clearInterval(timer);
-          }
-        });
+          });
+        // this.$api.reqCompareStatus(this.workObj.workCode).then((r) => {
+        //   if (r.data.errcode == 0 && r.data.data.urls.length > 0) {
+        //     this.$message({
+        //       message: "对比成功",
+        //       type: "success",
+        //     });
+        //     this.$store.dispatch("freshCompareWorkStatus", r.data.data.urls[0]);
+        //     this.compareImgUrl = this.workObj.compareResultUrl;
+        //     console.log(r);
+        //     this.closeUploadDialog();
+        //     clearInterval(timer);
+        //   }
+        // });
       }, 1000);
     });
   },
   methods: {
+    gotoCompareResult(compareId) {
+      console.log(compareId);
+      this.$store
+        .dispatch("reqAndRreshCompareWorkWithStatus", compareId)
+        .then(() => {
+          this.compareImgUrl = this.workObj.compareResultUrl;
+          if (this.workObj.compareResultUrl) {
+            this.$notify.success({
+              title: "成功",
+              message: "获取对比结果",
+            });
+          }
+          console.log(this.compareImgUrl);
+        });
+    },
     openUploadDialog() {
       this.IsUploadDialogShow = true;
     },
@@ -286,6 +319,27 @@ export default {
           this.totalPages = res.data.data.pages;
           this.isLoading = false;
         });
+    },
+    downloadCompareResult(compareId) {
+      if (!this.workObj || !this.workObj.workCode) {
+        this.$store
+          .dispatch("reqAndRreshCompareWorkWithStatus", compareId)
+          .then(() => {
+            this.compareImgUrl = this.workObj.compareResultUrl;
+            if (this.workObj.compareResultUrl) {
+              this.$notify.success({
+                title: "成功",
+                message: "获取对比结果",
+              });
+            }
+            console.log(this.compareImgUrl);
+            window.open(
+              this.$api.reqDownloadUrl(compareId, this.workObj.workCode)
+            );
+          });
+      } else {
+        window.open(this.$api.reqDownloadUrl(compareId, this.workObj.workCode));
+      }
     },
   },
   mounted() {
@@ -394,6 +448,7 @@ export default {
         .download {
           text-align: right;
           a {
+            cursor: pointer;
             color: #347eff;
           }
         }
