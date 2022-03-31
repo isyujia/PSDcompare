@@ -1,5 +1,6 @@
 import requests from "./axios"
-let backgroundUrl = 'http://127.0.0.1:8081'
+import baseUrl from './baseUrl'
+let backgroundUrl = baseUrl
 export const reqCompareHistory = (currentPage, PageSize) => requests({ url: `/compare/${currentPage}/${PageSize}`, type: 'get' })
 
 export const SearchHistory = ({ pageSize, currentPage, keywords, startTime, endTime }) => requests.post('/compare/search', { keyWords: keywords, maxPage: pageSize, startPage: currentPage, startTime, endTime })
