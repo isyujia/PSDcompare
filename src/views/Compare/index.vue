@@ -65,7 +65,7 @@
                         <span>{{ val.title ? val.title : "对比1" }}</span>
                       </el-col>
                       <el-col :span="4">
-                        <span class="success">{{ val.status }}</span>
+                        <span class="success">已完成</span>
                       </el-col>
                     </el-row>
 
@@ -74,20 +74,20 @@
                         <span>{{ val.title ? val.title : "对比2" }}</span>
                       </el-col>
                       <el-col :span="4">
-                        <span class="normal">{{ val.status }}</span>
+                        <span class="normal">已完成</span>
                       </el-col>
                     </el-row>
                     <el-row class="time-line">
                       <el-col :span="2">
                         <svg-icon
-                          v-if="val.status == '已完成'"
+                          v-if="val.status == '已完成' || true"
                           icon-class="play"
                         ></svg-icon>
                         <svg-icon v-else icon-class="clock"></svg-icon>
                       </el-col>
                       <el-col :span="19">
                         <el-progress
-                          :percentage="val.status == '已完成' ? 100 : 0"
+                          :percentage="val.status == '已完成' || true ? 100 : 0"
                           :stroke-width="10"
                           :show-text="false"
                         >
@@ -95,7 +95,7 @@
                       </el-col>
                       <el-col :span="3">
                         <div>
-                          <span>{{ val.status == "已完成" ? 100 : 0 }}%</span>
+                          <span>{{ val.status == "已完成" || true ? 100 : 0 }}%</span>
                         </div>
                       </el-col>
                     </el-row>
@@ -134,7 +134,7 @@
           <el-row class="main-right-header">
             <el-col :span="4">
               <span class="gray">图纸名称：</span>
-              <span>预制件1</span>
+              <span>{{ compareWorkName }}</span>
             </el-col>
             <el-col :span="5">
               <span class="gray">图纸大小：</span>
@@ -208,6 +208,7 @@ export default {
       isLoading: false, //是否在加载中，绑定给loading图标用
       isFoldArray: [],
       compareImgUrl: "",
+      compareWorkName: "对比任务",
     };
   },
   beforeUpdate() {

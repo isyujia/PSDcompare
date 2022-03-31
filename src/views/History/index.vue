@@ -119,8 +119,8 @@ export default {
   computed: {},
   methods: {
     clearAll() {
-      this.searchText = null;
-      this.daterange = null;
+      this.searchText = "";
+      this.daterange = "";
       this.freshTable();
     },
     handleEdit(index, row) {
@@ -146,14 +146,14 @@ export default {
         startTime,
         endTime,
       });
-      console.log(result);
+      // console.log(result);
       this.tableData = result.data.data.records;
       this.total = parseInt(result.data.data.total);
       return result;
     },
     freshTable() {
       let startT, endT;
-      if (this.daterange != "") {
+      if (this.daterange) {
         startT = this.formatDatetime(this.daterange[0]);
         endT = this.formatDatetime(this.daterange[1]);
       }
