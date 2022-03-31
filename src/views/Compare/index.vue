@@ -95,7 +95,11 @@
                       </el-col>
                       <el-col :span="3">
                         <div>
-                          <span>{{ val.status == "已完成" || true ? 100 : 0 }}%</span>
+                          <span
+                            >{{
+                              val.status == "已完成" || true ? 100 : 0
+                            }}%</span
+                          >
                         </div>
                       </el-col>
                     </el-row>
@@ -231,18 +235,22 @@ export default {
               type: "success",
             });
         });
+      let that = this;
       let timer = setInterval(() => {
-        this.$api
-          .reqAndRreshCompareWorkStatus(this.workObj.workCode)
-          .then(() => {
-            this.$message({
+        // that.$api
+        //   .reqAndRreshCompareWorkStatus(that.workObj.workCode)
+        //   .then(() => {
+        //   });
+          this.$store.dispatch('reqAndRreshCompareWorkStatus',this.workObj.workCode).then(()=>{
+
+            that.$message({
               message: "对比成功",
               type: "success",
             });
-            this.compareImgUrl = this.workObj.compareResultUrl;
-            this.closeUploadDialog();
+            that.compareImgUrl = that.workObj.compareResultUrl;
+            that.closeUploadDialog();
             clearInterval(timer);
-          });
+          })
         // this.$api.reqCompareStatus(this.workObj.workCode).then((r) => {
         //   if (r.data.errcode == 0 && r.data.data.urls.length > 0) {
         //     this.$message({

@@ -1,1 +1,1 @@
-export default "/api"
+export default "http://test.tianhaoltd.top/api"
