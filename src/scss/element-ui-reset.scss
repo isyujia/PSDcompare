@@ -1,0 +1,25 @@
+// element ui 的 Form 组件的表单元素之间间隔太大，占空间，调小
+.el-form {
+    &.el-form--label-top {
+        .el-form-item {
+            .el-form-item__label {
+                box-sizing: content-box;
+                line-height: 32px;
+                height: 32px;
+                padding-bottom: 4px;
+            }
+        }
+    }
+
+    .el-form-item {
+        margin-bottom: 16px;
+
+        .el-form-item__error {
+            padding-top: 2px;
+        }
+    }
+}
+
+.el-popover {
+    min-width: 120px !important; // 弹出框默认最小宽度150px，修改一下
+}

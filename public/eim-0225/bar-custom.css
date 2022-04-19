@@ -1,0 +1,29 @@
+.toolComponentDiv>.yj-but,
+.toolModelDiv>.yj-but,
+.toolPostilDiv>.yj-but,
+.homeViewer-div>.yj-but,
+.yj-group:last-child>.yj-but {
+    border-bottom-right-radius: 0 !important;
+    background-image: url("./corner.png");
+    background-repeat: no-repeat;
+    background-size: 6px;
+    background-position: right bottom;
+}
+
+.setModal {
+    background-color: unset;
+}
+
+.sceneColorDiv,
+.fullScreenDiv {
+    background-color: rgba(0, 0, 0, .5);
+    border-style: outset;
+    margin: 0;
+    border-color: #767676;
+    border-width: 2px;
+    padding: 0 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}

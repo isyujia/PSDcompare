@@ -1,0 +1,186 @@
+<!--
+ * @Author: Billy Chen
+ * @Date: 2021-02-26 11:50:20
+ * @LastEditors: Billy
+ * @LastEditTime: 2021-07-01 11:45:18
+ * @Description: iframe 封装 viewer
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <link rel="icon" href="../favicon.ico">
+    <title>I3V_EIM_3D</title>
+
+    <link href="../eim-0225/EIMMODEL.min.css" rel="stylesheet">
+    <link href="../eim-0225/bar-custom.css" rel="stylesheet">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        #viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        #link-contact {
+            z-index: 1000;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+    </style>
+
+    <!-- <script src="../eim-0225/EIMMODEL.min.js" charset="utf-8"></script> -->
+    <script src="../eim-0225/EIMMODEL.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="viewer">
+        <a id="link-contact" target="_blank" href="../#/login?routeName=Model">联系我们</a>
+    </div>
+
+    <script>
+        var toolOption = {
+            home: true, // 是否显示初始化按钮
+            fit: true, // 是否显示自适应按钮
+            restore: true, // 是否显示还原按钮
+            roam: true, // 是否显示漫游按钮
+            multiple: true, // 是否显示框选按钮
+            hide: true, // 是否显示隐藏按钮
+            isolation: true, // 是否显示隔离按钮
+            sectioning: true, // 是否显示剖切按钮
+            color: true, // 是否显示设置颜色按钮
+            setting: true, // 是否显示设置按钮
+            attribute: false, // 是否显示属性按钮
+            measurement: false, // 是否显示测距按钮
+            mark: false, // 标签
+            snapshot: false, // 快照
+            postil: false // 批注
+        };
+    </script>
+
+    <script>
+        var args = {} // 获取url以get方式传入的参数
+        // 截取?后面的片段包含的键值
+        window.location.search.substr(1).split('&').forEach(item => {
+            var [k, v] = item.split('=');
+            args[k] = v;
+        });
+
+        if (!args.projectKey) console.error('url 参数必须包括 projectKey');
+        if (!args.modelKeys) console.error('url 参数必须包括 modelKeys');
+
+        var MODEL_KEYS = args.modelKeys ? args.modelKeys.split(',') : [];
+        var PROJECT_KEY = args.projectKey || ""; // modelDb
+        var HOST = args.host || "http://139.9.215.236:82";
+
+        // 是否显示工具栏(url传参true为字符串)，默认值为true
+        var HAS_TOOLBAR = args.hasToolBar === "false" ? false : true;
+        // 控制是否显示viewer右上角的6面体(url传参true为字符串)，默认值为true
+        var HAS_CONTROLLER = args.hasController === "false" ? false : true;
+        // viewer的背景颜色
+        var BG_COLOR = args.bgColor;
+
+        // 1、用于更新本页面(timeStrmp一旦改变，则意味iframe的src改变，src改变会使iframe会自动刷新)
+        // 2、用于唯一标识本页面
+        var TIMESTAMP = args.timeStamp;
+
+        var IS_AUTO_RESIZE = args.isAutoResize ? args.isAutoResize : false;
+
+        var SHARE = args.share ? args.share : false;
+    </script>
+
+    <script>
+        if (!SHARE) {
+            window.document.getElementById('link-contact').style.display = 'none';
+        }
+    </script>
+
+    <script>
+        var option = {
+            host: HOST,
+            viewport: "viewer"
+        }; // viewport指上面div的id 
+
+        EIMMODEL.GlobalData.EnableViewController = HAS_CONTROLLER; // 显示viewer右上角的6面体
+        var viewer3D = new EIMMODEL.Viewer(option);
+
+        // 添加viewer的背景颜色
+        if (BG_COLOR) viewer3D.setSceneBackGroundColor(BG_COLOR);
+
+        // 添加viewer的工具条
+        if (HAS_TOOLBAR) {
+            var bosToolBar = new EIMMODEL.UI.ToolBar(viewer3D);
+            // bosToolBar.createTool(toolOption);
+            bosToolBar.createTool();
+        }
+    </script>
+
+    <script>
+        var modelKeysLoaded = [];
+        // viewer3D.viewerImpl.modelManager.addEventListener(
+        viewer3D.registerModelEventListener(
+            EIMMODEL.EVENTS.ON_LOAD_COMPLETE,
+            function (event) {
+                if (MODEL_KEYS.includes(event.modelKey)) {
+                    modelKeysLoaded.push(event.modelKey);
+                }
+                if (modelKeysLoaded.length >= MODEL_KEYS.length) {
+                    // 此时证明模型全加载完了
+                    var bEvent = new CustomEvent("allmodelsloaded", {
+                        detail: {
+                            timeStamp: Number(TIMESTAMP),
+                            modelKeys: MODEL_KEYS
+                        },
+                        bubbles: true, // 是否冒泡
+                        cancelable: true // 是否可以取消事件的默认行为
+                    });
+
+                    window.parent.dispatchEvent(bEvent);
+                }
+            }
+        );
+    </script>
+
+    <script>
+        // 往viewer添加模型
+        if (PROJECT_KEY) {
+            if (MODEL_KEYS.length) {
+                // 加载所有模型
+                MODEL_KEYS.forEach(modelKey => {
+                    viewer3D.addView(modelKey, PROJECT_KEY);
+                });
+            } else {
+                console.error('必须至少提供一个 modelKey');
+            }
+        } else {
+            console.error('projectKey 不能为空');
+        }
+    </script>
+
+    <script>
+        if (IS_AUTO_RESIZE) {
+            window.addEventListener("resize", function () {
+                // viewer3D.autoResize();
+                viewer3D.getViewerImpl().resize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+
+</html>

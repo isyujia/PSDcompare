@@ -1,47 +1,64 @@
-import Vue from 'vue'//在主js中引入基本的四个版块
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import '@/assets/icons';
-//element-ui插件的导入和使用
-import element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
-// 引入axios框架
-import axios from 'axios'
+/*
+ * @Author: Billy
+ * @Date: 2020-09-10 09:12:00
+ * @LastEditors: Billy
+ * @LastEditTime: 2022-03-07 15:03:20
+ * @Description: 请输入
+ */
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router/_index.js';
+import store from './store';
+import ElementUI from 'element-ui';
+import './scss/element-variables.scss';
+import "./svgicon/index.js";
+import Event from './util/Event';
+// import AuthHelper from "./auth/AuthHelper.js";
+import SafePush from './util/SafePush';
 
-import * as API from '@/api';
+Vue.config.productionTip = false;
+Vue.use(ElementUI, {
+  size: 'medium'
+});
 
-Vue.use(element)
-Vue.config.productionTip = false//生产模式提示是否开启
+Vue.prototype.$safePush = SafePush;
 
-Date.prototype.format = function (fmt) {
-  var o = {
-    "M+": this.getMonth() + 1,                 //月份 
-    "d+": this.getDate(),                    //日 
-    "h+": this.getHours(),                   //小时 
-    "m+": this.getMinutes(),                 //分 
-    "s+": this.getSeconds(),                 //秒 
-    "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-    "S": this.getMilliseconds()             //毫秒 
-  };
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-  }
-  for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+// 注册一个全局自定义指令 `v-auth`，用于验证权限
+// Vue.directive('auth', {
+//   bind: function (el, param) { },
+//   // 当被绑定的元素插入到 DOM 中时……
+//   inserted: function (el, param) {
+//     let pass = AuthHelper.checkAuth(param.value);
+//     if (!pass) {
+//       el.remove()
+//     }
+//   },
+//   update: function (el, param) { },
+//   componentUpdated: function (el, param) { },
+//   unbind: function (el, param) { }
+// });
+
+// 全局事件总线
+// 参考：https://zhuanlan.zhihu.com/p/72777951
+// 不到必要时，不建议使用，否则容易增加全局代码复杂度
+let EventBus = new Vue();
+Object.defineProperties(Vue.prototype, {
+  $bus: {
+    get: function () {
+      return EventBus;
     }
   }
-  return fmt;
-}
+});
 
 new Vue({
   router,
   store,
-  beforeCreate() {
-    Vue.prototype.$bus = this
-    Vue.prototype.$http = axios
-    Vue.prototype.$api = API
-  },
-  render: h => h(App)
+  render: h => h(App),
+  created: function () {
+    // 如果用原生的resize事件，将会损耗大量资源，因为resize事件触发的次数非常多
+    // 因此把连续触发的resize事件转化为optimizedResize自定义事件，节约资源，并且组件也有足够时间重新渲染
+    // 在此监听resize事件即可，不要在别处重复监听resize事件
+    // 参考：https://stackoverflow.com/questions/28056716/check-if-an-element-has-event-listener-on-it-no-jquery
+    Event.throttle('resize', 'optimizedResize', 500)
+  }
 }).$mount('#app')

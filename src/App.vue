@@ -1,131 +1,58 @@
+<!--
+ * @Author: Billy
+ * @Date: 2020-09-10 09:12:00
+ * @LastEditors: Billy
+ * @LastEditTime: 2022-01-05 19:55:32
+ * @Description: 请输入
+-->
 <template>
   <div id="app">
     <router-view />
   </div>
 </template>
 
+<script>
+export default {
+  computed: {
+    isLoginPage: function () {
+      return this.$route.name === "Login";
+    },
+  },
+  watch: {
+    isLoginPage: function (newVal, oldVal) {
+      let body = document.body;
+      if (newVal) {
+        body.classList.add("login");
+      } else {
+        body.classList.remove("login");
+      }
+    },
+  },
+  data() {
+    return {};
+  },
+};
+</script>
+
 <style lang="scss">
-html,
-body,
-div,
-ul,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-dl,
-dt,
-dd,
-ol,
-form,
-input,
-textarea,
-th,
-td,
-select {
-  margin: 0;
-  padding: 0;
-}
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  min-height: 100%;
+@import "@/scss/_variables.scss";
+@import "@/scss/scrollbar.scss";
+@import "@/scss/element-ui-reset.scss"; // 重设element ui的样式都写于这个scss
+
+body.login {
+  min-width: unset;
 }
 
 body {
-  font-family: "Microsoft YaHei";
+  min-width: $body-min-width;
+  min-height: $body-min-height;
+}
+
+#app {
+  height: 100%;
   font-size: 14px;
-  color: #333;
+  font-family: "Microsoft Yahei", "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: normal;
-}
-ul,
-ol {
-  list-style: none;
-}
-
-img {
-  border: none;
-  vertical-align: middle;
-}
-
-a {
-  text-decoration: none;
-  color: #232323;
-}
-
-table {
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-input,
-textarea {
-  outline: none;
-  border: none;
-}
-
-textarea {
-  resize: none;
-  overflow: auto;
-}
-
-.clearfix {
-  zoom: 1;
-}
-
-.clearfix:after {
-  content: ".";
-  width: 0;
-  height: 0;
-  visibility: hidden;
-  display: block;
-  clear: both;
-  overflow: hidden;
-}
-
-.fl {
-  float: left;
-}
-
-.fr {
-  float: right;
-}
-
-.tl {
-  text-align: left;
-}
-
-.tc {
-  text-align: center;
-}
-
-.tr {
-  text-align: right;
-}
-
-.ellipse {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.inline {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-}
-
-
 </style>

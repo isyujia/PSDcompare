@@ -1,24 +1,11 @@
-# psd
+<!--
+ * @Author: Billy
+ * @Date: 2021-05-07 08:51:17
+ * @LastEditors: Billy
+ * @LastEditTime: 2021-12-22 15:39:56
+ * @Description: v1.1
+-->
 
-## Project setup
-```
-npm install
-```
+## 后端文档
 
-### Compiles and hot-reloads for development
-```       卖家  达到
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+http://ty.y68.fun/sales-expo-saas/#/  

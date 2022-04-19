@@ -1,1 +1,0 @@
-export default "http://test.tianhaoltd.top/api"
